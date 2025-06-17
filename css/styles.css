@@ -1,91 +1,149 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0d0d0d;
-  color: #fff;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0d0d0d;
+    color: #fff;
+    /* O alinhamento de texto foi movido para seletores mais específicos */
 }
 
 header {
-  background-color: #000;
-  padding: 20px;
-  text-align: center;
+    background-color: #000;
+    padding: 20px;
+    text-align: center;
 }
 
-header img {
-  max-width: 250px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
+    header img {
+        max-width: 250px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
 
 nav {
-  background-color: #1a1a1a;
-  padding: 10px;
-  text-align: center;
+    background-color: #1a1a1a;
+    padding: 10px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-nav a {
-  color: #fdb913;
-  text-decoration: none;
-  margin: 0 15px;
-  font-weight: bold;
-}
+    nav a {
+        color: #fdb913;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: bold;
+    }
 
+/* O caminho ../imagens/ está correto, pois ele "sobe" um nível (da pasta css)
+   e depois entra na pasta de imagens.
+   Adicionado o gradiente para melhorar a legibilidade.
+*/
 .hero {
-  background: url('../imagens/hfc-banner.jpg') no-repeat center center;
-  background-size: cover;
-  padding: 100px 20px;
-  text-align: center;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../imagens/hfc-banner.png') no-repeat center center;
+    background-size: cover;
+    padding: 100px 20px;
+    text-align: center;
 }
 
-.hero h1 {
-  font-size: 3em;
-  margin-bottom: 20px;
-  color: #fdb913;
-}
+    .hero h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        color: #fdb913;
+    }
 
-.hero p {
-  font-size: 1.2em;
-  max-width: 600px;
-  margin: auto;
-}
+    .hero p {
+        font-size: 1.2em;
+        max-width: 600px;
+        margin: auto;
+    }
 
 section {
-  padding: 60px 20px;
-  max-width: 900px;
-  margin: auto;
+    padding: 60px 20px;
+    max-width: 900px;
+    margin: auto;
+    text-align: center; /* Centraliza o conteúdo das seções da página inicial */
 }
 
 h2 {
-  color: #fdb913;
-  margin-bottom: 20px;
+    color: #fdb913;
+    margin-bottom: 20px;
+    font-size: 2em;
 }
 
 .btn {
-  background-color: #fdb913;
-  color: #000;
-  padding: 12px 24px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  margin-top: 20px;
+    background-color: #fdb913;
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s;
 }
+
+    .btn:hover {
+        background-color: #fff;
+    }
 
 footer {
-  background-color: #000;
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #aaa;
+    background-color: #000;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 40px;
 }
 
-@media (max-width: 600px) {
-  .hero h1 {
-    font-size: 2em;
-  }
+/* --- NOVOS ESTILOS PARA AS PÁGINAS DE DEVOCIONAL --- */
 
-  .hero p {
-    font-size: 1em;
-  }
+/* Adicione esta classe à tag <section> nas suas páginas de devocional */
+.devotional-content {
+    text-align: left; /* Alinha o texto à esquerda para facilitar a leitura */
+    line-height: 1.7;
+}
+
+    .devotional-content h1 {
+        text-align: center; /* Centraliza apenas o título principal da página */
+        font-size: 2.5em;
+        color: #fdb913;
+    }
+
+    .devotional-content p {
+        font-size: 1.1em;
+        color: #e0e0e0;
+    }
+
+/* Container para o vídeo do Youtube */
+.video-container {
+    max-width: 854px; /* Limita a largura do vídeo */
+    margin: 30px auto; /* Centraliza o container de vídeo */
+    border-radius: 8px;
+    overflow: hidden; /* Garante que a borda arredondada apareça no iframe */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+    .video-container iframe {
+        width: 100%;
+        display: block; /* Remove espaço extra abaixo do vídeo */
+    }
+
+
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 2em;
+    }
+
+    .hero p {
+        font-size: 1em;
+    }
+
+    nav a {
+        margin: 0 10px;
+    }
+
+    .devotional-content h1 {
+        font-size: 1.8em;
+    }
 }
