@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="imagens/favicon.png" />
     <link rel="stylesheet" href="css/styles.css" />
     <style>
-        /* Estilos específicos para a lista de devocionais */
+        /* Estilos especï¿½ficos para a lista de devocionais */
         .devotional-list {
             display: flex;
             flex-wrap: wrap;
@@ -37,13 +37,13 @@
 </head>
 <body>
     <header>
-        <img src="imagens/logo-hfc.png" alt="Logo HFC" />
+        <img src="imagens/hfc-banner.png" alt="Logo HFC" />
     </header>
 
     <nav>
-        <a href="index.html">Início</a>
+        <a href="index.html">Inï¿½cio</a>
         <a href="devocionais.html">Devocionais</a>
-        <a href="index.html#proposito">Propósito</a>
+        <a href="index.html#proposito">Propï¿½sito</a>
         <a href="index.html#contato">Contato</a>
     </nav>
 
@@ -51,28 +51,32 @@
         <h2>Devocionais</h2>
         <p>Escolha um devocional abaixo para ler.</p>
         <div class="devotional-list" id="devotional-list-container">
-            <!-- Os links serão gerados pelo JavaScript -->
+            <!-- Os links serï¿½o gerados pelo JavaScript -->
         </div>
     </section>
 
     <footer>
-        &copy; <span id="ano"></span> Ministério HFC - Igreja Vida Triunfante. Todos os direitos reservados.
+        &copy; <span id="ano"></span> Ministï¿½rio HFC - Igreja Vida Triunfante. Todos os direitos reservados.
     </footer>
 
     <script>
-    document.getElementById("ano").textContent = new Date().getFullYear();
+        document.getElementById("ano").textContent = new Date().getFullYear();
 
-    // Gera a lista de links para os devocionais
-    const container = document.getElementById('devotional-list-container');
-    const totalDevotionals = 32;
+        // Gera a lista de links para os devocionais
+        const container = document.getElementById('devotional-list-container');
+        const totalDevotionals = 32;
 
-    for (let i = 1; i <= totalDevotionals; i++) {
-      const link = document.createElement('a');
-      // O caminho aponta para a pasta 'devocionais'
-      link.href = `devocionais/${i}.html`;
-      link.textContent = `Devocional ${i}`;
-      container.appendChild(link);
-    }
+        for (let i = 1; i <= totalDevotionals; i++) {
+            const link = document.createElement('a');
+            // O caminho aponta para a pasta 'devocionais'
+            if (i < 10)
+                link.href = `devocionais/devocional0${i}.html`;
+            else
+                link.href = `devocionais/devocional${i}.html`;
+
+            link.textContent = `Devocional ${i}`;
+            container.appendChild(link);
+        }
     </script>
 </body>
 </html>

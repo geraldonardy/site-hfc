@@ -1,44 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devocional 06 - HFC</title>
-  <link rel="stylesheet" href="../css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devocional 06 - HFC</title>
+    <!--
+      O caminho para o CSS está correto.
+      '../' sobe um nível (da pasta 'devocionais' para a raiz)
+      e depois entra na pasta 'css'.
+    -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="icon" type="image/png" href="../imagens/favicon.png" />
 </head>
 <body>
-  <header>
-    <a href="../index.html">
-      <img src="../imagens/logo-hfc.png" alt="Logo HFC" />
-    </a>
-  </header>
+    <header>
+        <!-- O link para a imagem e para o index.html está correto, usando '../' -->
+        <a href="../index.html">
+            <img src="../imagens/hfc-banner.png" alt="Logo HFC" />
+        </a>
+    </header>
 
-  <nav>
-    <a href="../index.html">Início</a>
-    <a href="devocional05.html">Anterior</a>
-    <a href="devocional07.html">Próximo</a>
-  </nav>
+    <nav>
+        <a href="../index.html">Início</a>
+        <a href="../devocionais.html">Ver Todos</a>
+        <!-- Link para o devocional anterior (o último, neste caso) -->
+        <a href="devocional05.html">Anterior</a>
+        <!-- Link para o próximo devocional -->
+        <a href="devocional07.html">Próximo</a>
+    </nav>
 
-  <section>
-    <h1>Devocional 06 - Palavra do Dia</h1>
-    <p><strong>Data:</strong> Julho de 2025</p>
+    <!-- A classe 'devotional-content' aplica os estilos de formatação do CSS -->
+    <section class="devotional-content">
+        <h1>Devocional 06 - Palavra do Dia</h1>
+        <p><strong>Data:</strong> Julho de 2025</p>
 
-    <div class="video-container" style="text-align: center;">
-      <iframe width="100%" height="400" src="https://www.youtube.com/embed/ID_DO_VIDEO_06"
-        title="Devocional 06" frameborder="0" allowfullscreen></iframe>
-    </div>
+        <!-- O container do vídeo usará os estilos definidos no CSS -->
+        <div class="video-container">
+            <iframe width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/ID_DO_VIDEO_01"
+                    title="Devocional 01"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+            </iframe>
+        </div>
 
-    <p style="margin-top: 20px;">
-      Palavra breve do Ap. Isaque para começar o dia com fé, propósito e direção do Espírito.
-    </p>
-  </section>
+        <p>
+            Palavra breve do Ap. Isaque para começar o dia com fé, propósito e direção do Espírito.
+            Este parágrafo agora terá o alinhamento à esquerda, melhorando a leitura, graças
+            à classe 'devotional-content'. O texto ficará mais organizado e fácil de acompanhar.
+        </p>
+        <p>
+            Você pode adicionar mais parágrafos aqui, e todos seguirão a mesma formatação,
+            criando uma página limpa e profissional para cada devocional.
+        </p>
+    </section>
 
-  <footer>
-    &copy; <span id="ano"></span> Ministério HFC - Igreja Vida Triunfante
-  </footer>
+    <footer>
+        &copy; <span id="ano"></span> Ministério HFC - Igreja Vida Triunfante
+    </footer>
 
-  <script>
-    document.getElementById("ano").textContent = new Date().getFullYear();
-  </script>
+    <script>
+        document.getElementById("ano").textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
