@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bem vindo - HFC</title>
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="imagens/favicon.png" />
+</head>
+<body>
+    <header>
+        <!-- O link para a imagem e para o index.html está correto, usando '/' -->
+        <a href="index.html">
+            <img src="imagens/hfc-banner.png" alt="Logo HFC" />
+        </a>
+    </header> 
+    <section class="devotional-content">
+        <h1>Bem vindo</h1>
+        <!--<p><strong>Data:</strong> Julho de 2025</p>-->
+        <!-- O container do vídeo usará os estilos definidos no CSS -->
+        <div class="video-container">
+            <video controls autoplay muted loop width="100%" height="auto">
+                <source src="videos/convite.mp4" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
+        </div>
+        <p>O HFC, Homens Fortes e Corajosos, é um ministério que acredita no poder da comunhão para transformar vidas. Todos os domingos às 07:00, nos reunimos para aprender, ser desafiados e fortalecer nossa caminhada espiritual, em um ambiente de acolhimento, amizade e mentoria entre homens.</p>
+        <p>Se você deseja crescer, ser inspirado e encontrar um grupo de homens que caminham juntos em direção ao propósito de Deus, venha participar dos nossos cultos. Este é o seu lugar para ser edificado, motivado e se tornar um homem forte e corajoso!</p>         
+    </section>
+
+    <footer>
+        &copy; <span id="ano"></span> Ministério HFC - Igreja Vida Triunfante
+    </footer>
+
+    <script>
+        document.getElementById("ano").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
