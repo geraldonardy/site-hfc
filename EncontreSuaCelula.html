@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encontre a célula mais próxima de você</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: none;
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #FDB913;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #e5a907;
+            }
+
+        #resultado {
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .mapa-pequeno {
+            width: 150px;
+            height: 150px;
+        }
+
+        .local-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .local-info {
+            margin-left: 15px;
+        }
+
+        #mapBusca {
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .nome-celula {
+            color: #FDB913;
+        }
+
+        footer {
+            background-color: #111;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #444;
+        }
+
+        .social-icons img {
+            width: 40px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        .social-icons a {
+            text-decoration: none;
+        }
+
+        header {
+            background-color: black; /* Cor do cabeçalho */
+            padding: 20px;
+            text-align: center;
+        }
+
+            header .logo img {
+                width: 300px; /* Ajuste o tamanho do logo conforme necessário */
+                margin-bottom: 10px;
+            }
+
+            header h1 {
+                font-size: 36px;
+                color: #1e1e1e; /* Cor escura para o título */
+            }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="imagens/pb - logo ivt.png" alt="Logo Igreja Vida Triunfante" class="logo-image">
+        </div>
+    </header>
+
+    <h1>Encontre a célula mais próxima de você</h1>
+
+    <p>Digite seu CEP ou o Endereço Completo:</p>
+    <input type="text" id="inputEndereco" placeholder="Ex: 12345-678 ou Rua Exemplo, 123">
+    <button onclick="buscarLocal()">Buscar</button>
+    <button onclick="listarTodos()">Listar Todos</button>
+
+    <div id="resultado"></div>
+    <div id="mapBusca"></div>
+
+    <script>
+        // Lista de locais com coordenadas e endereço completo
+                const locais = 
+        [
+          {
+            "nome": "Célula Alfa e Ômega",
+            "lat": -22.939577,
+            "lng": -46.517678,
+            "telefone": "(11) 9.69446043 / (11) 9.4635-9777",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Alexandre e Andrea",
+            "endereco": "Rua Professora Estela Gazzaneu de Carvalho, 254 - Toró, Bragança Paulista - SP, 12929-462"
+          },
+          {
+            "nome": "Célula Atos 2 (Jovens)",
+            "lat": -22.9155702,
+            "lng": -46.526253,
+            "telefone": "(11) 9.9881-8709",
+            "diaehora": "Sábado às 20:00",
+            "nomelider": "Victor",
+            "endereco": "Avenida Professor Júlio Ramos da Silva, 603 - Jardim Águas Claras, Bragança Paulista - SP, 12929-130"
+          },
+          {
+            "nome": "Célula Conectados Em Cristo",
+            "lat": -22.9295145,
+            "lng": -46.5445584,
+            "telefone": "(11) 9.74829363",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Kate Michele",
+            "endereco": "Travessa Monte Claro, 70 - Cruzeiro, Bragança Paulista - SP, 12906-310"
+          },
+          {
+            "nome": "Célula Ebenézer",
+            "lat": -22.909641,
+            "lng": -46.5528312,
+            "telefone": "(11) 9.3722-8812",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Diogo e Fran",
+            "endereco": "Avenida Professor Júlio Ramos da Silva, 427 - Águas Claras - Bragança Paulista SP 12929-130"
+          },
+          {
+            "nome": "Célula EL Shaddai",
+            "lat": -22.923046,
+            "lng": -46.5282975,
+            "telefone": "(11) 9.6476-0014 / (11) 9.6385-2485",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Moises e Juliana",
+            "endereco": "Avenida Professor Vicente Paccitti, 318 - Jardim Águas Claras, Bragança Paulista - SP, 12929-050"
+          },
+          {
+            "nome": "Célula Elohim",
+            "lat": -22.9166929,
+            "lng": -46.5395544,
+            "telefone": "(11) 9.1674-3925 / (11) 9.9685-2693",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Lucas e Ana",
+            "endereco": "Rua Ricieri Zadra Piniano, 205 - Residencial Hípica Jaguari, Bragança Paulista - SP, 12926-400"
+          },
+          {
+            "nome": "Célula Família Triunfante",
+            "lat": -22.9172819,
+            "lng": -46.5466858,
+            "telefone": "(11) 9.6346-1905",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Paolo e Jura",
+            "endereco": "Rua Amélia Rossi de Souza, 61 - Jardim Fraternidade, Bragança Paulista - SP, 12926-670"
+          },
+          {
+            "nome": "Célula Firmados na Rocha",
+            "lat": -22.9058553,
+            "lng": -46.5570644,
+            "telefone": "(11) 9.4383-3875 / (74) 9.8809-4147",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Andrea",
+            "endereco": "Rua Padre Lincon Leme, 717-5 - Cidade Planejada II, Bragança Paulista - SP, 12917-090"
+          },
+          {
+            "nome": "Célula Gileade",
+            "lat": -22.9456027,
+            "lng": -46.5613629,
+            "telefone": "(11) 9.5840-2276",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Eric e Gisele",
+            "endereco": "Rua Benedito Chiovatto, 75 - Jardim São Miguel, Bragança Paulista - SP, 12903-423"
+          },
+          {
+            "nome": "Célula Grace",
+            "lat": -22.9262875,
+            "lng": -46.5511131,
+            "telefone": "(11) 9.4661-8261",
+            "diaehora": "Domingo às 7:30",
+            "nomelider": "Paula do Marcelo",
+            "endereco": "(IVT) Avenida dos imigrantes, 6613 - Uberaba, Bragança Paulista - SP, 12926-210"
+          },
+          {
+            "nome": "Célula HMFC (Homens e Mulheres Fortes e Corajosos)",
+            "lat": -22.9204962,
+            "lng": -46.5400355,
+            "telefone": "(11) 9.6616-2620 / (11) 9.1080-7468",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Paulo Ricardo",
+            "endereco": "Rua Carlos Palazzi, 562 - Residencial Hípica Jaguari, Bragança Paulista - SP, 12926-530"
+          },
+          {
+            "nome": "Célula Huios (Jovens)",
+            "lat": -22.930934,
+            "lng": -46.567502,
+            "telefone": "(11) 9.7460-2206 / (11) 9.9684-7168",
+            "diaehora": "Sábado às 20:00",
+            "nomelider": "Gabriel Chabaribery Bedore",
+            "endereco": "Rua Molinara, 08 - Residenial Vino Barolo - Jardins, Bragança Paulista - SP, 12903-476"
+          },
+          {
+            "nome": "Célula Jeová Shamah",
+            "lat": -22.9091541,
+            "lng": -46.5238522,
+            "telefone": "(11) 9.4300-5244",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Fabinho e Paulinha",
+            "endereco": "Alameda das Manduiranas, 122 - Residencial Vem Viver, Bragança Paulista - SP, 12929-178"
+          },
+          {
+            "nome": "Célula Jovens Shekinah",
+            "lat": 22.9183153,
+            "lng": -46.5404128,
+            "telefone": "(11) 9.9877-4414",
+            "diaehora": "Sábado às 20:00",
+            "nomelider": "Ana Ardivel",
+            "endereco": "Rua Doutor Euclides de Souza Mathias, 55 - Residencial Hípica Jaguari - SP, 12926-695"
+          },
+          {
+            "nome": "Célula Kairós",
+            "lat": -22.9167016,
+            "lng": -46.5460356,
+            "telefone": "(11) 9.5840-2276 / (11) 9.5225-7448",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Luis e Josi",
+            "endereco": "Rua Luiz Naia, 106 - Jardim Fraternidade, Bragança Paulista - SP, 12926-700"
+          },
+          {
+            "nome": "Célula Novo Tempo",
+            "lat": -22.9365253,
+            "lng": -46.5294785,
+            "telefone": "(11) 9.4449-5289",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Cleiton e Regiane",
+            "endereco": "Avenida São Vicente de Paula, 547 - Jardim Recreio, Bragança Paulista - SP, 12910-111"
+          },
+          {
+            "nome": "Célula Oásis",
+            "lat": -22.9356391,
+            "lng": -46.5468792,
+            "telefone": "(11) 9.9873-0835",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Vagner e Adriana",
+            "endereco": "Rua Capitão Basílio Vieira da Silva, 88 - Núcleo Habitacional Padre Aldo Bolini, Bragança Paulista - SP, 12908-360"
+          },
+          {
+            "nome": "Célula Piracaia",
+            "lat": -23.0481541,
+            "lng": -46.3407441,
+            "telefone": "(11) 9.7348-0205",
+            "diaehora": "Quarta-feira às 19:30",
+            "nomelider": "Ap. Isaque Gomes",
+            "endereco": "Rua Duarte Batista Pinheiro, 135 - Jardim Santo Afonso, Piracaia - SP, 12970-000"
+          },
+          {
+            "nome": "Célula Primeiro Amor",
+            "lat": -22.9308913,
+            "lng": -46.5437255,
+            "telefone": "(11) 9.9714-2292 / (11) 9.3099-1431",
+            "diaehora": "Quarta-feira às 20:30",
+            "nomelider": "Marcelo e Juliana",
+            "endereco": "Rua Vereador Vicente Talamino, Bloco 16 Apto. 31A - Conjunto Habitacional Saada Nader Abi Chedid, Bragança Paulista - SP, 12908-850"
+          },
+          {
+            "nome": "Célula Rabôni",
+            "lat": -22.9608037,
+            "lng": -46.5514988,
+            "telefone": "(11) 9.7320-9863 / (11) 9.7372-5516",
+            "diaehora": "Sábado às 19h30",
+            "nomelider": "Victoria e Gabriel",
+            "endereco": "Avenida Doutor Manoel José Villaça, 1286 - Jardim América, Bragança Paulista - SP, 12902-160"
+          },
+          {
+            "nome": "Célula Shekinah",
+            "lat": -22.9357177,
+            "lng": -46.5560087,
+            "telefone": "(11) 9.6376-1608",
+            "diaehora": "Quarta-feira às 20:00",
+            "nomelider": "Ricardo e Bell",
+            "endereco": "Rua Dina Bueno Leme, 50 - Jardim Novo Mundo, Bragança Paulista - SP, 12906-310"
+          },
+          {
+            "nome": "Célula Terceira Onda (Adolescentes)",
+            "lat": -22.9262875,
+            "lng": -46.5511131,
+            "telefone": "(11) 9.4067-4657",
+            "diaehora": "Sábado às 19h30",
+            "nomelider": "Gabriela Gomes",
+            "endereco": "(IVT) Avenida dos imigrantes, 6613 - Uberaba, Bragança Paulista - SP, 12926-210"
+          }
+        ];
+
+        let map;
+
+        function calcularDistancia(lat1, lng1, lat2, lng2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function iniciarMapa(center, zoom) {
+            map = new google.maps.Map(document.getElementById('mapBusca'), {
+                center: center,
+                zoom: zoom,
+                mapTypeId: 'roadmap'
+            });
+        }
+
+        function adicionarMarcador(lat, lng, nome, info) {
+            const marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map,
+                title: nome
+            });
+            const infowindow = new google.maps.InfoWindow({
+                content: info
+            });
+            marker.addListener('click', function () {
+                infowindow.open(map, marker);
+            });
+            return marker;
+        }
+
+        function obterDirecoes(origem, destino) {
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            const request = {
+                origin: origem,
+                destination: destino,
+                travelMode: 'DRIVING'
+            };
+            directionsService.route(request, function (result, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    obterDirecoesTodos(destino.lat, destino.lng)
+                }
+            });
+        }
+
+        function obterDirecoesTodos(lat, long) {
+            // Verifica se o navegador suporta geolocalização
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    // Obtém as coordenadas atuais
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Cria a URL para o Google Maps com o destino e a posição atual
+                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${lat},${long}&travelmode=driving`;
+
+                    // Verifica se é um dispositivo móvel e se está no Safari (iPhone/iPad)
+                    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+                    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                    if (isIOS && isSafari) {
+                        // No Safari/iOS, redireciona diretamente em vez de usar window.open
+                        window.location.href = googleMapsUrl;
+                    } else {
+                        // Abre o Google Maps em uma nova aba/janela para outros navegadores ou desktop
+                        window.open(googleMapsUrl, '_blank');
+                    }
+                }, function (error) {
+                    console.error('Erro ao obter a localização: ', error);
+                    alert('Não foi possível obter sua localização.');
+                });
+            } else {
+                alert('Geolocalização não é suportada pelo seu navegador.');
+            }
+        }
+
+
+        function buscarLocal() {
+            const endereco = document.getElementById('inputEndereco').value;
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: endereco }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    const latLng = results[0].geometry.location;
+                    const centroBusca = { lat: latLng.lat(), lng: latLng.lng() };
+
+                    let maisProxima = null;
+                    let menorDistancia = Infinity;
+
+                    locais.forEach(local => {
+                        const distancia = calcularDistancia(latLng.lat(), latLng.lng(), local.lat, local.lng);
+                        if (distancia < menorDistancia) {
+                            menorDistancia = distancia;
+                            maisProxima = local;
+                        }
+                    });
+
+                    if (maisProxima) {
+                        iniciarMapa(centroBusca, 15);
+                        adicionarMarcador(maisProxima.lat, maisProxima.lng, maisProxima.nome, `
+                                                    <div>
+                                                        <h3 class="nome-celula">${maisProxima.nome}</h3>
+                                                        <p>Endereço: ${maisProxima.endereco}</p>
+                                                        <p>Telefone: ${maisProxima.telefone}</p>
+                                                        <p>Dia e Hora: ${maisProxima.diaehora}</p>
+                                                        <p>Líder: ${maisProxima.nomelider}</p>
+                                                    </div>
+                                                `);
+                        document.getElementById('resultado').innerHTML = `
+                                                    <div class="local-item">
+                                                        <div class="local-info">
+                                                            <h3 class="nome-celula">${maisProxima.nome}</h3>
+                                                            <p>Endereço: ${maisProxima.endereco}</p>
+                                                            <p>Telefone: ${maisProxima.telefone}</p>
+                                                            <p>Dia e Hora: ${maisProxima.diaehora}</p>
+                                                            <p>Líder: ${maisProxima.nomelider}</p>
+                                                            <p><strong>Distância:</strong> ${menorDistancia.toFixed(2)} km</p>
+                                                            <button onclick="obterDirecoes({lat: ${latLng.lat()}, lng: ${latLng.lng()}}, {lat: ${maisProxima.lat}, lng: ${maisProxima.lng}})">Obter Direções</button>
+                                                        </div>
+                                                    </div>`;
+                    } else {
+                        iniciarMapa(centroBusca, 15);
+                        document.getElementById('resultado').innerHTML = "<p>Nenhuma célula encontrada a menos de 20 km, não fique triste, logo teremos uma célula pertinho de você. Você pode buscar todas as células que temos, e vir até a que mais for próxima, estamos te aguardando.</p>";
+                    }
+                } else {
+                    document.getElementById('resultado').innerHTML = "<p>Não foi possível encontrar o local. Por favor, tente novamente.</p>";
+                }
+            });
+        }
+
+        function listarTodos() {
+            //Latitude e longitude da igreja
+            const centroLista = { lat: -22.9261111, lng: -46.5486111 };
+            iniciarMapa(centroLista, 13);
+
+            locais.forEach(local => {
+                adicionarMarcador(local.lat, local.lng, local.nome, `
+                                            <div>
+                                                <h3 class="nome-celula">${local.nome}</h3>
+                                                <p>Endereço: ${local.endereco}</p>
+                                                <p>Telefone: ${local.telefone}</p>
+                                                <p>Dia e Hora: ${local.diaehora}</p>
+                                                <p>Líder: ${local.nomelider}</p>
+                                            </div>
+                                        `);
+            });
+
+            const listaHtml = locais.map(local => `
+                                        <div class="local-item">
+                                            <div class="local-info">
+                                                <h3 class="nome-celula">${local.nome}</h3>
+                                                <p>Endereço: ${local.endereco}</p>
+                                                <p>Telefone: ${local.telefone}</p>
+                                                <p>Dia e Hora: ${local.diaehora}</p>
+                                                <p>Líder: ${local.nomelider}</p>
+                                                <button onclick="obterDirecoesTodos(${local.lat}, ${local.lng})">Obter Direções</button>
+                                            </div>
+                                        </div>
+                                    `).join('');
+
+            document.getElementById('resultado').innerHTML = listaHtml;
+        }
+    </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGPfgxm2aH99NwqbD3_4uqxMvLjHlAIiY&callback=iniciarMapa"></script>
+    <!-- Rodapé -->
+    <footer>
+        <p>Siga-nos nas redes sociais:</p>
+        <div class="social-icons">
+            <!-- Instagram Icon -->
+            <a href="https://www.instagram.com/igrejavidatriunfante" target="_blank">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxEAAAsRAX9kX5EAAAkXSURBVHhe7ZzZrxRFFIe5A6ICrolRcF8TVxSUxQ1FFJUlmog+iWL0QTTRP8AgkJgYEwV8MD4AJpIYlUWW4AKKPrFIXEGNouiDiMQoalhl8/tNHRDSXT3d0901c6/9Jb9UV9XpqlPn9u2lunq6VVRUVFRUVFRUVFRUVFRUhKDD0tI4cOBAL3Qlm5ejS9DpqA/qiVrBP2gb2oS+Rus6Ojo+RzvYLo3SAr1///4hJOPQaAZxUb2wTeFA+J7kbfRarVZbUy9sdwjw1Wge2ssAOhX4vActRNfYcNoP/OyOJuPktrrXnRjGsB1NYfMoG15uCjl14JTOu7M4RYx0JV0DAr2cZAKnE53Pc5E70DhzHlpIkHWx63IwtvUkdxHsH1xJc+QKNEdyX5L3CbLuJrosBFt3JyMI9mZXkp2mA03nPdE7BHm4FTUE+99J5OxvSLdZpd31eDiAdFt5CuqH7yerMA34rgPqTrTHisJgF4uGYKcrue5C7kFnUhQ6uBHkAzoLjcOn+SjtHdJkayIMdHglzu1yffvBZiW60XZrW/BxGFplbnvBZie6wnYrHzp7y/r2gs1MkmNsl7ZHvprPiWAz33YpF/oaSGd7XLfxUD/LzNsWfLwTPY0eR2dbscpn2zBioV5jH2jm5UFHM1yX8VC/hqRtj2R864OPc+vOGuQ3o7GqJz0WrbWqWKifXm+sLOigN/re+otA3V401MzbEtx81nl7JPi9FdWPbLLXayyuJgp1G0h61RssAzoYgva57qJQt9BM2xL8Ow4lHSiPmalsF1lxBOr2IU2apaZmaVoGcB+ZtM8cSwuBMfViQEMVAPQCegMtNWn7eTQRDZGt7ZaETmm93WYsh99Xe8diMdDUbzkwoBfrf9IYqNO/nuY8cqPAoeloA/L+Bx1ENug722ewNRMB0+7Uf+j2ikLd7WYqH85AW60qAnXlnadpfJ71E4G6dSR5H+lzT7FqXzQXDbBmj4Dym9FuMz8EZRpbDzPTH6WDMo3Jx5tmWjx0/K51EoG6FWaWGXbvyf5T0XbXWn5oaxuKneqkfDhajn5GX6FnsIuceihfUW8sBur0oqAcGnT8npllgv36ouXWTOHQ9jIUe0qj/FTkPWdT9541E4G6D8wsFVkvhoWCsxeQLOPiMsKVFA9t30qiYJ/vSv6jVqttQdstmxVNUKWmZYFm4P1I3iIQl7mS8qAPTeMusj5bQksCzX+ezptzsgSZfXQH8CnSXYOk7a1W3RD6upRkDvsU9noqC60K9CQGnmoeG9sl6D7sdQ8/iH/14ZK2VaY6tBDtt128qE/snrJs+8K/Xu6LIXZXoZ22mxdsNMWa5aXCTdivdnv7wWYH6m+7JYJd0sXwfTNLRSuOaB3NiZNOjEOzf7dw5Ka+ZaTNj+yInWlFsWBzLMkklwtH0EATBE0vjnG5eLCZTYAfRjutKDUEcQf7PUIbr1iRj7HmSzBCB3o8wehu2QjUryWZ6HLNQx8Tra1YqO9B/f2WDUKwQDMwPXl5j2bq95I8wRG525U0D4HcRfKkteljNOdZnUaCEDLQ/QnAuZaNYylBXmXbuaGtlSTvuFws56Fg7/9CnjpiJ3kO41VLi8TbJn90TYAFO0+HDPSFlkbgaNeDx8cuVyh6rfanbcehKYAghAy0VjX5+JED7FfbLgxr8yeXiyXYI3nIQGvxuY+/CErShaspaFOriv52uViSfCqUkIH+XxMy0PqcwccJnEsPvd0oCtrUBNLxLhdLkk+FEjLQSSsxzyUop9l2YVib57hcLL9YWjohA73B0gicS08i8b5UzcFg2j7RtuPQtytBCBnoTy31Md7SIvG2ydGuNySfuFz5BAs0R9YXjO1Hy8ahtXDX2nZuaOs6kjtcLpaN8sm2SydkoPUd3xKXi0K9LoZa15d73Z7mMGhvhrXpYwn1mhMJQshTh4L5KoHcZ9kI1F9N/UuWzYPa8D5emw+FrqpqROhA65y42OXiwWYCR+QsgpF5ESH7aRGmvg570Ip8LKrVao2uGYUSNNCGFrUk/ssSqIew0Wuz1MsQsL2JZIX2dSXxYKcXClNdLhzBA82RpAvQcy7nh4Dpdk+riRaj+5DutQ9fstVDZVanl7MfsM8gq/aCzXPmQ/vCgApZqYS5gpRpdRL2WkT5GZsfSdpWWb0yJdgvI0n9BIp9p345q6NKE0gP4O86V9IY9jkRaansMEnbKqtXpsD6esD6Dk5LAi3499Xj791Zgt0s9LGeAOvr16Y/yMxLywItGLg++x1JIPTNdSnQ9jKS2wj0RldSGJmWKGcNtL529dHUUisdZQRhFJu6G2l2wWEE2tKvLEym7dE5juSkMWV6iZw10EnTiqcwsKYWohOMPUhBGUYbWhDe9HnU9p2LbiTAU9R2vSIjNhZ9yhwL7ZY3xcqV1vvpm+4AUFGfVgxG09C3qOHqf9mYrb5zaXiLlwbaafRpxTQzTUWmI5DGH+Uv6X1Epv9xHEXzLJsb+tO6Cy0J0OO01jfrD3kcEnpFpd/R0LlXT5xf0nfm1U0+NBYS7+cT1D9Kfy9btlgYeKf+/C0LjGWxDSuCYoDKmD930HiaDzoLm+psFYzhBo3FhhWBunI/6BR0Mt11Fw/1a1GwpVZFI981BhtOLIqBmZcH/aT56L7Ras62Rb7bMGLR2FGjVVfFQEcLrF8v2MxCnebIlq/y2dz3gk1hF/uG0Fl/lGbV/mp0s+3WtuCjvjvU8rFENGYU9ke66Hey6z4ZHNMFcgG6l6x+Xqeph5oikQ/yRT6Zbw0/gxbYPW1NZKbpQdPvUUg/XnWLFTUE+z9IDv54lR5hQwddb76PRnri64vvWX68ajn2o1BTT5q5BkrnpyH9epY+LeuyMMavSPRNzRZXkp1cs3cEWKs1x+BIe7+xyAFj06/xjs0TZJF7mhQHtOT2dhx614q6DIxJU6wjGV/uKdZC5qN1ZKPROKYLZGFTna2CMWgNimb+8kyxlgtO6oHmdZT4UNOOyGekadrCP7ko7aqPw5p0uRd1hh/q1gJMfVhU2g91l357RcD1dKgXqZczoItJTydt6U/P44Pevmwi/YZU7yw/J8CFTbFWVFRUVFRUVFRUVFRUVFS0iG7d/gVfZEIQICi0VwAAAABJRU5ErkJggg==" alt="Instagram">
+            </a>
+            <!-- YouTube Icon -->
+            <a href="https://www.youtube.com/@IgrejaVidaTriunfante" target="_blank">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAA0XSURBVHhe7dxJiF1FFwfw6k6MRk2cEodMJkZRNBBEEBeKQzSJ4iZBhSSILgQFF24U4yLY4CYbFyJE3DgsFEVBcSBBE0WjIIgoKmrUIJJBY4zzPL3v/Y5d/d28flPzfV/fzmf9obpv1T1V99T/nHuqzr3vvYG5c+c2fvvtt3TooYemqVOnJsc//PBDGhwcTNOnT09//fVX+v777xNMmzYtTZ48Of3444/pl19+SQcffHA6/PDD0x9//FFkesgMhkTB/xwDCxcubLDCr7/+Gt7s+JBDDkmNRiP99NNP4dk8HX7++ef0559/xvmDDjoo/f7772G5SZMmFZkeMk0eB6MRnBAq1BHO5XV0rDgmA2QGBgaiXmR6ywzMnz+/gdxh1oNoBbQBQVDXWZ0MeW28v8h0lxnktUIEWBBZxi0glLgFpkyZEu6vOCajoz4GVC8yvWUmHXXUUUNYV1jBSahap7WercUoBi0yvWUGTjnllAbGbUlYwXHe1n3zzTfR4YgjjojBvv3224jbtiwWAFa0tTFgkekuM4hxpAJSWUU9W0VprUO1T5HpLRMJi5WRBcRkx7zbSZbRQR0OO+ywsA7PF8N5vzZWLDLdZYpHj5PMwEknndQQyHky5h2zBAOwCuLVQUJjAHtElhPktRmoyHSXGUSskAGCt5M6EibEAOqKYzLI18cA6kWmt0wkLEh2MoM3Q27rVIci059MJCye1oHFj8sL5ixhgfQESgKj5KdRBtKH96sXmd4yB0zCou2/ITOeOldl/uOE5bvvvosBq33EdtuabG39sowLkxG38jhkjGNdaL2WZ7zS2Oq1jjzyyBEZ1yKT9dHWaxxJhHkaBznGRQb9yBiTR1Zl8jjVuY8lYRk4+eSTGxQzWSccIwlpLoZodWAMCrGe/+QpZdDmnRHEupAxjj766FCcksYyAUpTXt0YJp/HZgALiLpz6voam6L0iEWl2WZ8cC3XJw92SeZhfPLO0Zme+hmTMyGE/lnm66+/Djky4Py+fftCxrXIaNP/mGOOCb3z2HSr8kMnc8VFVabvhIUSOlB65syZ6ayzzkpnn312WrhwYVycrAsaR0FoJuRAQTYcYymMwtu//PLLtGPHjvTuu++ml156KX3wwQfhNOad+QLzx1G7hGVgzpw58SpLQ75tDI5ogyFa3e3eDDPpxhtvTCtWrAiy/4n46quv0mOPPZY2bNgQBuDdvB2EEESLBAzFcZ0PovtJWFjsvPPOS3fddVeaN29eDPpPx549e9JNN92UnnnmmXTCCSdEGyflmO5khAs92jht14QF+ay2fPny9OijjxaSKzjuuOPSQw89lK644opwRDEZX3k96DthUSd0/PHHpy1btsRiVzAaOLrkkkvShx9+OLIo4i8j89oxYRFjdLj11lsLyV3Ac2+++eZYw0QCHOKtNWEZOPHEExt5G1ONK0ozfqcXX3xxJLQUtIe4fMEFF6SPP/44iM3rHT7xGttNVrBasoLVE8E5sdC5kNwbYvGVV14Z+3EcquPU+qcuOrR9Hs2rWWPZsmXRXtAb559/fmzlckyuchrFFo4lCOTsTlbEImeeeWYIF/TGqaeemk477bTIRTgqToUQnErg2nq0xVDGl3P4gt7goKeffnqQC6M8ul2MZpUzzjgjBAv6x+zZsyNzRCxOhd+RGN0pYZk1a1a0FfSPGTNmRDaN6NaEZdAfj/KEDMHcdkSm4zlHwdjAo+3YOCtObfFwGqS3Jiw8nKsXoseOY489NhY/RLcmLG1DByvU9XTuiy++SHfccUf65JNPhlsOHOS1DnCK25HQ0W4xFGvqSrvFtQceeCCde+65ad26denzzz8fPjPxkR8z58Wwa8KibrXMD0jGG9YKb2d4wvr169NFF12U7rzzzljNJzryM3189kxYkKxNXKkDDO1Fg/DlRYOHNWvXro3M65577hl5mzERITERp617PRMWQHaO23WAPtkThDYevnfv3nT77beniy++ON17773hDBMNdO3o0e1itHdh2uuAO8tKLXTQh5L0c1syvidkt9xyS1q6dGl6+OGHRyY0EWBrzJuBzl0TFoImSqguMDI96IN4+iGcws7NnTs3diXXXnttvGJ78sknh3vWD/pC1nlk19GasCBem/91wJ3lWQtC6cNjq5t/awfCOYIE4f33309XX311uvTSS9OmTZuGR6kP8o+OCUvr6/LsSXUhey59EE8/yqtrZwjFBJBtcps3b45nwqtWrUqvvPLK8EjjDzG6nc5N7x799bc6wwa4PiXpA/Sjp7p25xVOos2x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" alt="YouTube">
+            </a>
+        </div>
+        <p>&copy; <span id="current-year"></span> Igreja Vida Triunfante. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Atualiza o ano automaticamente
+        const currentYear = new Date().getFullYear();
+        document.getElementById('current-year').textContent = currentYear;
+    </script>
+</body>
+</html>
