@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar no Grupo VIP</title>
+    <!-- Tailwind CSS para estilo rápido e bonito -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="imagens/favicon.png" />
+    <style>
+        .whatsapp-green {
+            background-color: #25D366;
+        }
+
+            .whatsapp-green:hover {
+                background-color: #128C7E;
+            }
+    </style>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-4">
+    
+    <div class="bg-white shadow-xl rounded-2xl max-w-md w-full overflow-hidden">
+        <img src="imagens/hfc-banner-conf.png" alt="Logo HFC" />
+
+        <!-- Cabeçalho -->
+        <div class="bg-black p-6 text-center">
+            <h1 class="text-2xl font-bold text-white mb-2">Grupo Exclusivo Conferência 2026</h1>
+            <p class="text-blue-100 text-sm">Preencha seus dados para liberar o acesso ao nosso grupo de WhatsApp.</p>
+        </div>
+
+        <div class="p-8">
+
+            <!--
+            TRUQUE MÁGICO (IFRAME OCULTO)
+            O formulário envia os dados para cá.
+        -->
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+            <!--
+            FORMULÁRIO CONFIGURADO
+            Conectado à sua planilha do Google Forms
+        -->
+            <form id="contactForm"
+                  action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfIcjuCHUIv-zCjGln9GIiTvidNlw__BGZlm1GA3S3D8JZ9XA/formResponse"
+                  method="POST"
+                  target="hidden_iframe"
+                  onsubmit="handleFormSubmit()">
+                <div class="space-y-4">
+                    <!-- Campo Nome -->
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Nome Completo</label>
+                        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               id="name"
+                               name="entry.1754997062"
+                               type="text"
+                               placeholder="Seu nome"
+                               required>
+                    </div>
+
+                    <!-- Campo Telefone -->
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">WhatsApp / Telefone</label>
+                        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               id="phone"
+                               name="entry.1612570208"
+                               type="tel"
+                               placeholder="(11) 99999-9999"
+                               required>
+                    </div>
+
+                    <!-- Campo Email -->
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Seu melhor Email</label>
+                        <input class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               id="email"
+                               name="entry.729038351"
+                               type="email"
+                               placeholder="exemplo@email.com"
+                               required>
+                    </div>
+
+                    <!-- Botão de Enviar -->
+                    <button id="submitBtn"
+                            type="submit"
+                            class="w-full bg-black hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition duration-300 transform hover:scale-105 flex justify-center items-center gap-2">
+                        <span>Liberar Acesso</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- TELA DE SUCESSO -->
+            <div id="successMessage" class="hidden text-center animate-fade-in">
+                <div class="mb-6">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+                        <i class="fas fa-check text-green-600 text-2xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Cadastro realizado!</h3>
+                <p class="text-gray-600 mb-8">Clique no botão abaixo para entrar no grupo agora mesmo.</p>
+
+                <!-- LINK DO WHATSAPP ATUALIZADO -->
+                <a href="https://chat.whatsapp.com/C6g1YrrGDMVL3LfS1YTtkj?mode=hqrt1"
+                   target="_blank"
+                   class="whatsapp-green text-white font-bold py-4 px-6 rounded-lg w-full flex items-center justify-center gap-3 transition duration-300 shadow-lg transform hover:scale-105">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    <span>Entrar no Grupo VIP</span>
+                </a>
+            </div>
+
+            <!-- Loader -->
+            <div id="loader" class="hidden flex flex-col items-center justify-center py-10">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-black"></div>
+                <p class="text-gray-500 mt-4 text-sm">Processando...</p>
+            </div>
+
+        </div>
+
+        <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
+            <p class="text-xs text-center text-gray-400">Seus dados estão seguros. Não enviamos spam.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleFormSubmit() {
+            const form = document.getElementById('contactForm');
+            const successMsg = document.getElementById('successMessage');
+            const loader = document.getElementById('loader');
+
+            // Esconde form, mostra loader
+            form.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            // Simula tempo de envio (espera 1.5s para parecer natural e dar tempo do post ir pro Google)
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                successMsg.classList.remove('hidden');
+            }, 1500);
+
+            // Opcional: marca no navegador que já converteu
+            localStorage.setItem('userRegistered', 'true');
+        }
+    </script>
+</body>
+</html>
